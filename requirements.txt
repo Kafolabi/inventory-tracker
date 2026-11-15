@@ -1,0 +1,2 @@
+# Inventory Tracker
+# Uses only the Python standard library, so there is nothing to install.
