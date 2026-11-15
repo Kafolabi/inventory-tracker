@@ -1,17 +1,14 @@
-from inventory import inventory
-from utils.helpers import highest_stock_item, lowest_stock_item
+from inventory import Item, inventory
+from utils.helpers import highest_stock_item, lowest_stock_item, low_stock_items
 
 
-def total_stock_value(items):
+def total_stock_value(items: list[Item]) -> float:
     total = 0
     for item in items:
-        # Bug fix: the value of an item is quantity x price.
-        # The old code added only the price and ignored the quantity.
-        total = total + item["quantity"] * item["price"]
+        total = total + item.value
     return total
 
 
-# Bug fix: the output now runs only when app.py is executed directly
 if __name__ == "__main__":
     print("Inventory Tracker")
     print("Items:", inventory)
@@ -19,6 +16,13 @@ if __name__ == "__main__":
     print("Highest stock item:", highest_stock_item(inventory))
     print("Lowest stock item:", lowest_stock_item(inventory))
 
-    # Checks for the fixes
+    # New feature: low-stock alert
+    print("Low stock (10 or fewer):", [item.item_name for item in low_stock_items(inventory)])
+
+    # Checks
     print("Total value of an empty inventory:", total_stock_value([]))
     print("Highest stock item of an empty inventory:", highest_stock_item([]))
+    try:
+        Item("Printer", -5, 90000)
+    except ValueError as error:
+        print("Rejected:", error)

@@ -1,8 +1,33 @@
-inventory = [
-    {"item_name": "Laptop", "quantity": 10, "price": 450000},
-    {"item_name": "Mouse", "quantity": 50, "price": 3500},
-    {"item_name": "Keyboard", "quantity": 30, "price": 8000},
-    {"item_name": "Monitor", "quantity": 8, "price": 120000},
-    {"item_name": "USB Cable", "quantity": 100, "price": 1500},
-    {"item_name": "Headset", "quantity": 0, "price": 15000},
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True, slots=True)
+class Item:
+    """One stock item. The values are checked when the item is created."""
+
+    item_name: str
+    quantity: int
+    price: float
+
+    def __post_init__(self) -> None:
+        if not self.item_name.strip():
+            raise ValueError("item_name cannot be empty.")
+        if self.quantity < 0:
+            raise ValueError(f"{self.item_name}: quantity cannot be negative.")
+        if self.price < 0:
+            raise ValueError(f"{self.item_name}: price cannot be negative.")
+
+    @property
+    def value(self) -> float:
+        """Stock value of this item: quantity x price."""
+        return self.quantity * self.price
+
+
+inventory: list[Item] = [
+    Item("Laptop", 10, 450000),
+    Item("Mouse", 50, 3500),
+    Item("Keyboard", 30, 8000),
+    Item("Monitor", 8, 120000),
+    Item("USB Cable", 100, 1500),
+    Item("Headset", 0, 15000),
 ]
